@@ -36,7 +36,7 @@ function cache_client(port, host) {
 }
 
 function _interact(verb, path, successStatus, options, port, host) {
-	verb = verb.toLowerCase();
+	verb = verb.toUpperCase();
 	options = options || {};
 	var request;
 	
@@ -51,14 +51,14 @@ function _interact(verb, path, successStatus, options, port, host) {
 	}
 	
 	if (options.body) {
-		if (verb === "get") {
-			verb = "post";
+		if (verb === "GET") {
+			verb = "POST";
 		}
 		var requestBody = toJSON(options.body);
-		request = client[verb](requestPath, [["Content-Length", requestBody.length], ["Content-Type", "application/json"]]);
+		request = client.request(verb, requestPath, [["Content-Length", requestBody.length], ["Content-Type", "application/json"]]);
 		request.sendBody(requestBody, "utf8");
 	} else {
-		request = client[verb](requestPath);
+		request = client.request(verb, requestPath);
 	}
 	request.finish(function(response) {
 		var responseBody = "";
@@ -116,11 +116,11 @@ var CouchDB = {
 	debug : true,
 	
 	activeTasks: function(options) {
-		_interact("get", "/_active_tasks", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);
+		_interact("GET", "/_active_tasks", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);
 	},
 	
 	allDbs : function(options) {
-		_interact("get", "/_all_dbs", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);	
+		_interact("GET", "/_all_dbs", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);	
 	},
 	
 	generateUUIDs : function(options) {
@@ -132,7 +132,7 @@ var CouchDB = {
 		options.success = function(result) {
 			callback(result.uuids);
 		};
-		_interact("get", "/_uuids", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);
+		_interact("GET", "/_uuids", 200, options, CouchDB.defaultPort, CouchDB.defaultHost);
 	},
 	
 	db : function(name, port, host) {
@@ -150,23 +150,23 @@ var CouchDB = {
 			},
 			
 			compact : function(options) {
-				this.interact("post", "_compact", 202, options);
+				this.interact("POST", "_compact", 202, options);
 			},
 			
 			create : function(options) {
-				this.interact("put", "", 201, options);
+				this.interact("PUT", "", 201, options);
 			},
 			
 			drop : function(options) {
-				this.interact("del", "", 200, options);
+				this.interact("DEL", "", 200, options);
 			},
 			
 			info : function(options) {
-				this.interact("get", "", 200, options);				
+				this.interact("GET", "", 200, options);				
 			},
 
 			allDocs : function(options) {
-				this.interact("get", "_all_docs", 200, options);
+				this.interact("GET", "_all_docs", 200, options);
 			},
 
 			openDoc : function(docId, options) {
@@ -179,7 +179,7 @@ var CouchDB = {
 						keys : docId
 					};				
 				}
-				this.interact("get", path, 200, options); // interact will override get to post when needed
+				this.interact("GET", path, 200, options); // interact will override get to post when needed
 			},
 
 			saveDoc : function(doc, options) {
@@ -199,9 +199,9 @@ var CouchDB = {
 				options.body = doc;
 
 				if (doc._id === undefined) {
-					this.interact("post", "", 201, options);
+					this.interact("POST", "", 201, options);
 				} else {
-					this.interact("put", doc._id, 201, options);
+					this.interact("PUT", doc._id, 201, options);
 				}
 			},
 
@@ -220,12 +220,12 @@ var CouchDB = {
 					}
 				};
 
-				this.interact("del", doc._id, 200, options);
+				this.interact("DEL", doc._id, 200, options);
 			},
 
 			view : function(name, options) {
 				name = name.split('/');
-				this.interact("get", "_design/" + name[0] + "/_view/" + name[1], 200, options);
+				this.interact("GET", "_design/" + name[0] + "/_view/" + name[1], 200, options);
 			}
 		}	
 	}
