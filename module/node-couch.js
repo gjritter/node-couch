@@ -54,8 +54,9 @@ function _interact(verb, path, successStatus, options, port, host) {
 		if (verb === "GET") {
 			verb = "POST";
 		}
+
 		var requestBody = toJSON(options.body);
-		request = client.request(verb, requestPath, [["Content-Length", requestBody.length], ["Content-Type", "application/json"]]);
+		request = client.request(verb, requestPath, {"Content-Length": requestBody.length, "Content-Type": "application/json"});
 		request.sendBody(requestBody, "utf8");
 	} else {
 		request = client.request(verb, requestPath);
