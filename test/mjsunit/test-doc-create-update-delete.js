@@ -1,5 +1,5 @@
-include("mjsunit.js");
-include("../../module/node-couch.js");
+process.mixin(GLOBAL, require("mjsunit"));
+process.mixin(GLOBAL, require("../../module/node-couch"));
 
 function unwantedError(result) {
 	throw("Unwanted error" + JSON.stringify(result));
