@@ -11,3 +11,9 @@ The API is inspired by jquery.node.js.
 This is a very initial check-in, please bear with me :-)
 
 Feedback welcome.
+
+To Do
+-----
+
+Make the tests work again. The test files run to completion now,
+but they don't actually do anything in recent versions of node.
