@@ -1,13 +1,13 @@
 process.mixin(GLOBAL, require("mjsunit"));
 process.mixin(GLOBAL, require("../../module/node-couch"));
 
-function unwantedError(result) {
-	throw("Unwanted error" + JSON.stringify(result));
-}
+(function() {
+	function unwantedError(result) {
+		throw("Unwanted error" + JSON.stringify(result));
+	}
 
-var result = 0;
+	var result = 0;
 
-function onLoad () {
 	CouchDB.generateUUIDs({
 		count : 10,
 		success : function(response) {
@@ -23,9 +23,8 @@ function onLoad () {
 		},
 		error : unwantedError
 	});
-	
-}
 
-function onExit() {
-	assertEquals(2, result, "Number of callbacks mismatch");
-}
+	process.addListener("exit", function(code) {
+		assertEquals(2, result, "Number of callbacks mismatch");
+	});
+}());

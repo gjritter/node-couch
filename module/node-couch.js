@@ -159,7 +159,7 @@ var CouchDB = {
 			},
 			
 			drop : function(options) {
-				this.interact("DEL", "", 200, options);
+				this.interact("DELETE", "", 200, options);
 			},
 			
 			info : function(options) {
@@ -221,7 +221,7 @@ var CouchDB = {
 					}
 				};
 
-				this.interact("DEL", doc._id, 200, options);
+				this.interact("DELETE", doc._id, 200, options);
 			},
 
 			view : function(name, options) {
